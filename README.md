@@ -40,13 +40,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+Express is used to build web applications and serve single page applications. As well as building REST web services (Representational State Transfer)
+
 - [ ] Describe Middleware?
+
+Middleware adds extra functionality to the express framework including custom middleware which has error handling. Middleware makes code cleaner and more efficient by practically creating a variable that can be used throughout the code. 
 
 - [ ] Describe a Resource?
 
+Everything is a resource and is accessible with a unique URI. Resource occurs with HTTP. 
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+It can return a status code of 200. 
+
 - [ ] How can we partition our application into sub-applications?
+
+We can do this by using express routers to make it easier to maintain through multiple folders/files. 
 
 ## Minimum Viable Product
 
