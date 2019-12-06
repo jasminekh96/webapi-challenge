@@ -27,6 +27,21 @@ router.get('/:id', validateProjectId, (req, res) => {
 	res.status(200).json(req.projects);
 });
 
+// get by ID actions
+router.get('/:id/actions', validateProjectId, (req, res) => {
+	pM
+		.getProjectActions(req.projects.id)
+		.then((actions) => {
+			res.status(200).json(actions);
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).json({
+				message : 'Could not get actions',
+			});
+		});
+});
+
 //post
 router.post('/', (req, res) => {
 	const { name, description } = req.body;
@@ -49,35 +64,12 @@ router.post('/', (req, res) => {
 	}
 });
 
-// put
-// router.put('/:id', (req, res) => {
-// 	const { id } = req.params;
-// 	const { name, description } = req.body;
-// 	if (!name && !description) {
-// 		return res.status(400).json({ errorMessage: 'Please provide name and description for the post.' });
-// 	}
-// 	pM
-// 		.update(id, { name, description })
-// 		.then((updated) => {
-// 			if (updated) {
-// 				pM.get(id).then((projectPost) => res.status(200).json(projectPost)).catch((err) => {
-// 					console.log(err);
-// 					res.status(500).json({ error: 'The project information could not be modified.' });
-// 				});
-// 			} else {
-// 				res.status(404).json({ message: 'The project with the specified ID does not exist.' });
-// 			}
-// 		})
-// 		.catch((err) => {
-// 			console.log(err);
-// 			res.status(500).json({ error: 'The project information could not be retrieved.' });
-// 		});
-// });
+//put
 router.put('/:id', validateProjectId, validateProject, (req, res) => {
 	pM
 		.update(req.params.id, req.body)
-		.then(() => {
-			res.status(200).json(req.body);
+		.then((projects) => {
+			res.status(200).json(projects);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -114,7 +106,7 @@ function validateProjectId(req, res, next) {
 					req.projects = projects;
 					next();
 				} else {
-					res.status(404).json({ message: 'invalid user id' });
+					res.status(404).json({ message: 'invalid actions ID' });
 				}
 			})
 			.catch((error) => {
@@ -127,12 +119,17 @@ function validateProjectId(req, res, next) {
 }
 
 function validateProject(req, res, next) {
-	if (!req.body) {
-		res.status(400).json({ message: 'missing name data' });
-	} else if (!req.body.description) {
-		res.status(400).json({ message: 'missing required description field' });
+	if (!Object.entries(req.body).length) {
+		res.status(404).json({ message: 'missing project' });
 	}
-	next();
+	if (!req.body.name) {
+		res.status(404).json({ message: 'missing name' });
+	}
+	if (!req.body.description) {
+		res.status(404).json({ message: 'missing description' });
+	} else {
+		return next();
+	}
 }
 
 module.exports = router;
