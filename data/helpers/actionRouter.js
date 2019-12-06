@@ -27,7 +27,7 @@ router.get('/:id', validateActionId, (req, res) => {
 });
 
 // post
-router.post('/', (req, res) => {
+router.post('/', validateAction, (req, res) => {
 	const { project_id, description, notes } = req.body;
 	if (!project_id || !description || !notes) {
 		res.status(400).json({ error: 'Please provide project_id, description, and notes for the post.' });
@@ -112,6 +112,9 @@ function validateAction(req, res, next) {
 	}
 	if (!req.body.notes) {
 		res.status(404).json({ message: 'missing notes' });
+	}
+	if (req.body.description && req.body.description.length > 128) {
+		res.status(400).json({ error: 'description limit is 128' });
 	} else {
 		return next();
 	}
