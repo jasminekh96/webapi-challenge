@@ -17,4 +17,7 @@ server.get('/', (req, res) => {
 	res.send(`<h2>She works!!</h2>`);
 });
 
+server.use('/api/actions', actionRouter);
+server.use('/api/projects', postRouter);
+
 module.exports = server;
