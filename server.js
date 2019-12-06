@@ -3,7 +3,7 @@ const express = require('express');
 const server = express();
 
 const actionRouter = require('./data/helpers/actionRouter');
-const postRouter = require('./data/helpers/projectRouter');
+const projectRouter = require('./data/helpers/projectRouter');
 
 function logger(req, res, next) {
 	console.log(`${req.method} to ${req.originalUrl} at ${new Date()}`);
@@ -18,6 +18,6 @@ server.get('/', (req, res) => {
 });
 
 server.use('/api/actions', actionRouter);
-server.use('/api/projects', postRouter);
+server.use('/api/projects', projectRouter);
 
 module.exports = server;

@@ -28,24 +28,17 @@ router.get('/:id', validateActionId, (req, res) => {
 
 // post
 router.post('/', validateAction, (req, res) => {
-	const { project_id, description, notes } = req.body;
-	if (!project_id || !description || !notes) {
-		res.status(400).json({ error: 'Please provide project_id, description, and notes for the post.' });
-	} else {
-		aM
-			.insert({ project_id, description, notes })
-			.then(({ id }) => {
-				pM.get(id).then((actionPost) => {
-					res.status(201).json(actionPost);
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				res.status(500).json({
-					errorMessage : 'There was an error while saving the post to the database',
-				});
+	aM
+		.insert(req.body)
+		.then((project) => {
+			res.status(201).json(project);
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).json({
+				errorMessage : 'There was an error while saving the action to the database',
 			});
-	}
+		});
 });
 
 // put
@@ -115,9 +108,8 @@ function validateAction(req, res, next) {
 	}
 	if (req.body.description && req.body.description.length > 128) {
 		res.status(400).json({ error: 'description limit is 128' });
-	} else {
-		return next();
 	}
+	next();
 }
 
 module.exports = router;
